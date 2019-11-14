@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  app:
+    image: clojure
+    volumes:
+      - "~/.bash_history:/.bash_history"
+      - "./services/app:/usr/src/app"
+    working_dir: /usr/src/app
