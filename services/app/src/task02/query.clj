@@ -1,5 +1,7 @@
 (ns task02.query
-  (:use [task02 helpers db]))
+  (:use [task02 helpers db])
+  (:use [clojure.core.match :only (match)])
+  (:require [clojure.string :as str]))
 
 ;; Функция выполняющая парсинг запроса переданного пользователем
 ;;
@@ -35,9 +37,14 @@
 ;; > (parse-select "werfwefw")
 ;; nil
 (defn parse-select [^String sel-string]
-  :implement-me)
+  (let [sel (str/split sel-string #" ")]
+    (match sel
+           ["select" tbl & args] (cons tbl)
+           ["where"]
+           :else nil)))
 
-(defn make-where-function [& args] :implement-me)
+(defn make-where-function [& args]
+  "IMPLEMENT ME")
 
 ;; Выполняет запрос переданный в строке.  Бросает исключение если не удалось распарсить запрос
 

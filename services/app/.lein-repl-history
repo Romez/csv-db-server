@@ -1,0 +1,7 @@
+(.split " " "hello world")
+(.split "leoo" "")
+(require '[clojure.string :as str])
+(str/split "hello world" " ")
+(str/split "hello world" #" ")
+exi
+exit
