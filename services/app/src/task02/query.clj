@@ -1,7 +1,8 @@
 (ns task02.query
   (:use [task02 helpers db])
   (:use [clojure.core.match :only (match)])
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str])
+  (:use task02.helpers))
 
 ;; Функция выполняющая парсинг запроса переданного пользователем
 ;;
@@ -36,15 +37,25 @@
 ;; ("student" :where #<function> :order-by :id :limit 2 :joins [[:id "subject" :sid]])
 ;; > (parse-select "werfwefw")
 ;; nil
-(defn parse-select [^String sel-string]
-  (let [sel (str/split sel-string #" ")]
-    (match sel
-           ["select" tbl & args] (cons tbl)
-           ["where"]
-           :else nil)))
+(defn make-where-function [column comp-op value]
+  (fn [row] (comp-op value (get (keyword column) row))))
 
-(defn make-where-function [& args]
-  "IMPLEMENT ME")
+(defn parse-select [^String sel-string]
+  (defn check-match [sel]
+    (match sel
+      ["select" tbl & args] (cons tbl (check-match args))
+      ["where" column comp-op value & args]
+        (concat (list :where (make-where-function column comp-op value)) (check-match args))
+      ["order" "by" column & args]
+        (concat (list :order-by (keyword column)) (check-match args))
+      ["limit" limit & args]
+        (concat (list :limit (parse-int limit)) (check-match args))
+      ["join" tbl "on" column1 "=" column2 & args]
+        (concat (list :joins [[(keyword column1) tbl (keyword column2)]]))
+      :else nil))
+
+  (check-match (str/split sel-string #" ")))
+
 
 ;; Выполняет запрос переданный в строке.  Бросает исключение если не удалось распарсить запрос
 
