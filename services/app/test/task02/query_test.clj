@@ -35,7 +35,6 @@
       (is (= joins [[:id "subject" :sid]]))))
   )
 
-
 (deftest perform-query-test
   (testing "perform-query"
       (is (perform-query "select student where year = 1997")

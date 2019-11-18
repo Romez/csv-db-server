@@ -37,21 +37,35 @@
 ;; ("student" :where #<function> :order-by :id :limit 2 :joins [[:id "subject" :sid]])
 ;; > (parse-select "werfwefw")
 ;; nil
+(def operations {"=" =, ">" >, ">=" >=, "<" <, "<=" <=})
+
 (defn make-where-function [column comp-op value]
-  (fn [row] (comp-op value (get (keyword column) row))))
+  (let [column-key (keyword column)
+        op (operations comp-op)]
+    (fn [row] (op value (str (row column-key))))))
 
 (defn parse-select [^String sel-string]
   (defn check-match [sel]
     (match sel
       ["select" tbl & args] (cons tbl (check-match args))
       ["where" column comp-op value & args]
-        (concat (list :where (make-where-function column comp-op value)) (check-match args))
+        (do
+          (concat
+            (list :where (make-where-function column comp-op value))
+            (check-match args))
+          )
       ["order" "by" column & args]
-        (concat (list :order-by (keyword column)) (check-match args))
+        (concat
+          (list :order-by (keyword column))
+          (check-match args))
       ["limit" limit & args]
-        (concat (list :limit (parse-int limit)) (check-match args))
+        (concat
+         (list :limit (parse-int limit))
+         (check-match args))
       ["join" tbl "on" column1 "=" column2 & args]
-        (concat (list :joins [[(keyword column1) tbl (keyword column2)]]))
+        (concat
+          (list :joins [[(keyword column1) tbl (keyword column2)]])
+          (check-match args))
       :else nil))
 
   (check-match (str/split sel-string #" ")))

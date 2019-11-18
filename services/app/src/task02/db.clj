@@ -21,7 +21,7 @@
   (update-in rec [field] parse-int))
 
 ;; Место для хранения данных - используйте atom/ref/agent/...
-(def student :implement-me)
+(def student (atom '()))
 (def subject :implement-me)
 (def student-subject :implement-me)
 
@@ -38,7 +38,7 @@
 ;;; и сохраняет их в изменяемых переменных student, subject, student-subject
 (defn load-initial-data []
   ;;; :implement-me может быть необходимо добавить что-то еще
-  (:implement-me student (->> (data-table (csv/read-csv (slurp "student.csv")))
+  (reset! student (->> (data-table (csv/read-csv (slurp "student.csv")))
                      (map #(str-field-to-int :id %))
                      (map #(str-field-to-int :year %))))
   (:implement-me subject (->> (data-table (csv/read-csv (slurp "subject.csv")))
