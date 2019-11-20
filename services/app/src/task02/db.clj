@@ -111,8 +111,9 @@
 ;;   (update student {:id 5})
 ;;   (update student {:id 6} :where #(= (:year %) 1996))
 (defn update [data upd-map & {:keys [where]}]
-  :implement-me
-  )
+  (swap!
+    data
+    (partial map (fn [item] (if (where item) (merge item upd-map) item)))))
 
 
 ;; Вставляет новую строку в указанную таблицу
