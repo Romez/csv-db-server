@@ -1,10 +1,19 @@
 .PHONY: test
 
-test:
+test-server:
 	docker-compose run app lein test
 
-app-build:
-	docker-compose build
+build-server:
+	docker-compose run app bash -c "lein compile && lein install"
 
-app-bash:
+build-client:
+	docker-compose run client bash -c "mvn -q compile"
+
+server-run:
+	docker-compose run app lein run
+
+server-bash:
 	docker-compose run app bash
+
+client-bash:
+	docker-compose run client bash

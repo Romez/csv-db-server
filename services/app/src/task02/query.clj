@@ -85,4 +85,5 @@
 (defn perform-query [^String sel-string]
   (if-let [query (parse-select sel-string)]
     (apply select (get-table (first query)) (rest query))
-    (throw (IllegalArgumentException. (str "Can't parse query: " sel-string)))))
+    (throw (IllegalArgumentException. (str "Can't parse query: " sel-string)))
+    ))

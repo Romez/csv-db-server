@@ -108,7 +108,7 @@
 ;; - Новые данные передаются в виде map который будет объединен с данными в таблице.
 ;;
 ;; Примеры использования:
-;;   (update student {:id 5})
+;;   (clojure.core/update student {:id 5})
 ;;   (update student {:id 6} :where #(= (:year %) 1996))
 (defn update [data upd-map & {:keys [where]}]
   (swap!

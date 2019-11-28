@@ -5,3 +5,8 @@
 (str/split "hello world" #" ")
 exi
 exit
+(require 'task02.core)
+(task02.core/-main)
+exit
+(cons "test" nil)
+exit

@@ -7,4 +7,7 @@
                  [org.clojure/data.csv "0.1.2"]
                  [org.clojure/core.match "0.3.0"]]
   :aot [task02.Database task02.core]
-  :main task02.core)
+  ; :java-source-paths ["src/java"]
+  :main task02.core
+  :local-repo "/repo"
+  )
