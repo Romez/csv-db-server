@@ -1,18 +1,18 @@
 version: '3.7'
 
 services:
-  app:
+  server:
     image: clojure
     volumes:
       - ~/.bash_history:/.bash_history
       - ./services/app:/app
       - repo:/repo
     working_dir: /app
-  client:
+  jclient:
     image: maven
     volumes:
       - ~/.bash_history:/.bash_history"
-      - ./services/client:/app
+      - ./services/jclient:/app
       - repo:/repo
     working_dir: /app
 
