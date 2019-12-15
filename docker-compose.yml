@@ -1,20 +1,39 @@
 version: '3.7'
 
 services:
-  server:
+  client:
     image: clojure
+    container_name: client
     volumes:
       - ~/.bash_history:/.bash_history
-      - ./services/app:/app
-      - repo:/repo
+      - ./services/client:/app
     working_dir: /app
+    networks:
+      - csvdb-net
+
+  server:
+    image: clojure
+    container_name: server
+    volumes:
+      - ~/.bash_history:/.bash_history
+      - ./services/server:/app
+      - repo:/repo
+    ports:
+      - 9997:9997
+    working_dir: /app
+    networks:
+      - csvdb-net
+
   jclient:
     image: maven
     volumes:
-      - ~/.bash_history:/.bash_history"
+      - ~/.bash_history:/.bash_history
       - ./services/jclient:/app
       - repo:/repo
     working_dir: /app
 
 volumes:
   repo:
+
+networks:
+  csvdb-net:

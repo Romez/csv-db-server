@@ -4,7 +4,7 @@ server-test:
 	docker-compose run server lein test
 
 server-run:
-	docker-compose run server lein run
+	docker-compose run -p 9997:9997 server lein run
 
 server-bash:
 	docker-compose run server bash
